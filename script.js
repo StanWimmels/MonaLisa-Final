@@ -13,12 +13,8 @@ canvas.width = img.width;
 canvas.height = img.height;
 
 
-function Scanimage() {
-
-}
 
 function average() {
-  console.log(imgData.data.length);
   for (let i = 0; i < imgData.data.length; i += 4) {
 
     var valueR = parseInt(imgData.data[i]);
@@ -29,17 +25,18 @@ function average() {
     kleur++;
   }
 
+  //let one = rgb.splice(0, Math.ceil(rgb.length / 2));
+
+
   while (rgb.length > click) {
     kleur = 0;
-
-
     for (let i = 0; i < rgb.length; i += 2) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       var base = rgb[kleur];
       var added = rgb[kleur + 1];
 
       var mix = [];
-      
+
       mix[3] = 1 - (1 - added[3]) * (1 - base[3]);
       mix[0] = Math.round((added[0] * added[3] / mix[3]) + (base[0] * base[3] * (1 - added[3]) / mix[3]));
       mix[1] = Math.round((added[1] * added[3] / mix[3]) + (base[1] * base[3] * (1 - added[3]) / mix[3]));
@@ -48,32 +45,34 @@ function average() {
       kleurmix[kleur] = mix;
       kleur++;
     }
+    console.log(kleurmix.length);
+
     rgb = kleurmix;
-    console.log(rgb.length);
 
     kleurmix = [];
-
-    for (let i = 0; i < rgb.length; i++) {
-
-      var Color = "rgb" + "(" + rgb[i].toString() + ")";
-      ctx.fillStyle = Color;
-
-      var pixelsize = (canvas.width * canvas.height) / click;
-      ctx.fillRect(countX, countY, pixelsize, pixelsize);
-      if (countX < canvas.width) {
-
-        countX = countX + pixelsize;      
-      }
-      else {
-        countY = countY + pixelsize;
-        countX = 0;
-      }
-    }
-    countX = 0;
-    countY = 0;
   }
-  click += 1000;
+  for (let i = 0; i < rgb.length; i++) {
+
+    var Color = "rgb" + "(" + rgb[i].toString() + ")";
+    ctx.fillStyle = Color;
+
+    var pixelsize = (canvas.width * canvas.height) / click;
+    ctx.fillRect(countX, countY, pixelsize, pixelsize);
+    if (countX < canvas.width) {
+      countX = countX + pixelsize;
+    }
+    if (countY < canvas.height) {
+      countY = countY + pixelsize;
+      countX = 0;
+    }
+
+  }
+  countX = 0;
+  countY = 0;
+  click += 100;
 }
+
+
 
 
 // ctx.putImageData(rgb[0], 0, 0);     console.log(rgb[0]); //RGBA staat in 1 array //
