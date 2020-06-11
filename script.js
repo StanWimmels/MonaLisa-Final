@@ -4,6 +4,7 @@ let kleur = 0;
 let click = 1;
 let countX = 0;
 let countY = 0;
+let buttonclick = 0;
 var c = document.getElementById("canvas");
 var ctx = c.getContext("2d");
 var img = document.getElementById("redblue");
@@ -16,7 +17,6 @@ canvas.height = img.height;
 
 function average() {
   for (let i = 0; i < imgData.data.length; i += 4) {
-
     var valueR = parseInt(imgData.data[i]);
     var valueG = parseInt(imgData.data[i + 1]);
     var valueB = parseInt(imgData.data[i + 2]);
@@ -25,13 +25,15 @@ function average() {
     kleur++;
   }
 
-  //let one = rgb.splice(0, Math.ceil(rgb.length / 2));
+
+  let one = rgb.splice(0, Math.ceil(rgb.length / 2));
 
 
   while (rgb.length > click) {
     kleur = 0;
-    for (let i = 0; i < rgb.length; i += 2) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < click; i += 2) {
+
       var base = rgb[kleur];
       var added = rgb[kleur + 1];
 
@@ -45,34 +47,39 @@ function average() {
       kleurmix[kleur] = mix;
       kleur++;
     }
-    console.log(kleurmix.length);
-
     rgb = kleurmix;
 
     kleurmix = [];
+
   }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   for (let i = 0; i < rgb.length; i++) {
 
     var Color = "rgb" + "(" + rgb[i].toString() + ")";
     ctx.fillStyle = Color;
 
     var pixelsize = (canvas.width * canvas.height) / click;
-    ctx.fillRect(countX, countY, pixelsize, pixelsize);
+
+
     if (countX < canvas.width) {
+      ctx.fillRect(countX, countY, pixelsize, pixelsize);
       countX = countX + pixelsize;
     }
-    if (countY < canvas.height) {
+    else {
+      ctx.fillRect(countX, countY, pixelsize, pixelsize);
       countY = countY + pixelsize;
       countX = 0;
     }
 
   }
+
+  console.log(pixelsize);
+  console.log(rgb.length);
   countX = 0;
   countY = 0;
-  click += 100;
+  click += 1000;
+  kleur = 0;
+
 }
-
-
-
 
 // ctx.putImageData(rgb[0], 0, 0);     console.log(rgb[0]); //RGBA staat in 1 array //
